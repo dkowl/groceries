@@ -1,0 +1,34 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Your Recipes</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static "recipes/style.css" %}">
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+Chettan+2&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div class="basket">
+      <h1>Basket</h1>
+      {% for property in basket.properties %}
+        <div>
+          <div>{{ property.0 }}</div>
+          <div>{{ property.1 }}</div>
+        </div>
+      {% endfor %}
+    </div>
+    <div class="recipes">
+      <h1>Recipes</h1>
+      {% for recipe in recipes %}
+        <div class="recipe">
+        <h2><a href="{{ recipe.name }}">{{ recipe.name }}</a></h2>
+        {% for property in recipe.properties %}
+          <div>
+            <div>{{ property.0 }}</div>
+            <div>{{ property.1 }}</div>
+          </div>
+        {% endfor %}
+        </div>
+      {% endfor %}
+    </div>
+  </body>
+</html>
