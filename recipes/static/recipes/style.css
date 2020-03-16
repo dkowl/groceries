@@ -39,12 +39,17 @@ button{
 }
 
 .primary-btn{
+	border: none;
+	outline: none;
+	background: none;
+	border-radius: 3px;
 	background-color: rgb(233, 130, 45);
 	color: #f2f4ef;
 	font-size: 1em;
 	font-weight: bolder;
 	padding: 5px 20px;
 	text-align: center;
+	text-decoration: none;
 }
 
 .primary-btn:hover{
@@ -56,6 +61,7 @@ button{
 }
 
 #new-recipe{
+	display: inline-block;
 	margin-top: 20px;
 }
 
@@ -81,9 +87,6 @@ button{
 	text-align: right;
 	padding-right: 20px;
 	width: 80px;
-}
-
-.recipe-name > a{
 }
 
 .recipe-name > a:link{

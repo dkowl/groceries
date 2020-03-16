@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 import copy
+from .forms import RecipeForm, FoodIdForm
 
 # Create your views here.
 def index(request):
@@ -35,3 +36,8 @@ def index(request):
     recipes.append(copy.deepcopy(basket))
         
     return render(request, 'recipes/index.html', {"recipes": recipes, "basket": basket})
+
+def new_recipe(request):
+
+
+    return render(request, 'recipes/new-recipe.html', {"recipe_form": RecipeForm(), "food_form": FoodIdForm()})
