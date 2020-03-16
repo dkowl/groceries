@@ -4,29 +4,41 @@
     <title>Your Recipes</title>
     {% load static %}
     <link rel="stylesheet" href="{% static "recipes/style.css" %}">
-    <link href="https://fonts.googleapis.com/css2?family=Baloo+Chettan+2&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap" rel="stylesheet">
   </head>
   <body>
-    <div class="basket">
-      <h1>Basket</h1>
+    <div class="recipe-row basket">
+      <div class="recipe-name basket-name">Basket</div>
       {% for property in basket.properties %}
-        <div>
-          <div>{{ property.0 }}</div>
-          <div>{{ property.1 }}</div>
+        <div class="recipe-property">
+          <div class="recipe-property-title">{{ property.0 }}</div>
+          <div class="recipe-property-value">{{ property.1 }}</div>
         </div>
       {% endfor %}
+      <div class="recipe-row-end">
+        <button class="clear-btn">Clear</button>
+        <button class="grocery-list-btn">Grocery List</button>
+      </div>
     </div>
     <div class="recipes">
-      <h1>Recipes</h1>
+      <div class="recipes-title">Recipes</div>
       {% for recipe in recipes %}
-        <div class="recipe">
-        <h2><a href="{{ recipe.name }}">{{ recipe.name }}</a></h2>
-        {% for property in recipe.properties %}
-          <div>
-            <div>{{ property.0 }}</div>
-            <div>{{ property.1 }}</div>
+        <div class="recipe-row">
+          <div class="recipe-name"><a href="{{ recipe.name }}">{{ recipe.name }}</a></div>
+          {% for property in recipe.properties %}
+            <div class="recipe-property">
+              <div class="recipe-property-title">{{ property.0 }}</div>
+              <div class="recipe-property-value">{{ property.1 }}</div>
+            </div>
+          {% endfor %}
+          <div class="recipe-row-end">
+            <button class="recipe-button recipe-button-add">
+              +              
+            </button>
+            <button class="recipe-button recipe-button-remove">
+              -
+            </button>
           </div>
-        {% endfor %}
         </div>
       {% endfor %}
     </div>

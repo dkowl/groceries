@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+import copy
 
 # Create your views here.
 def index(request):
@@ -28,7 +29,9 @@ def index(request):
         basket.properties.append((property, basket_props[property]))
        
     recipes = []
-    recipes.append(basket)
-    recipes.append(basket)
+    basket.name = "Kurczaczek niezwykle pyszniutki mniam mniam"
+    recipes.append(copy.deepcopy(basket))
+    basket.name = "Burritko"
+    recipes.append(copy.deepcopy(basket))
         
     return render(request, 'recipes/index.html', {"recipes": recipes, "basket": basket})
