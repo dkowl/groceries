@@ -107,7 +107,7 @@ button{
 	width: 80px;
 }
 
-.recipe-button{
+.add-button{
 	width: 40px;
 	text-align: center;
 	font-weight: bolder;
@@ -119,10 +119,15 @@ button{
 	text-shadow: 1px 1px 0px grey;
 }
 
-.recipe-button:hover{
+.add-button:hover{
 	color:rgb(233, 130, 45);
 }
 
-.recipe-button:active{
+.add-button:active{
 	color:rgb(190, 105, 35);
+}
+
+.food{
+	display: flex;
+	align-items: center;
 }

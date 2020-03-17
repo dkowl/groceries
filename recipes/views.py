@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 import copy
+import logging
 from .forms import RecipeForm, FoodIdForm
+from .models import Food
 
 # Create your views here.
 def index(request):
@@ -37,7 +39,17 @@ def index(request):
         
     return render(request, 'recipes/index.html', {"recipes": recipes, "basket": basket})
 
-def new_recipe(request):
+def new_recipe(request):    
 
+    logger = logging.getLogger(__name__)
+    logger.debug("Debug message")
+    try:
+        logger.debug(request.POST)
+    except:
+        pass
 
-    return render(request, 'recipes/new-recipe.html', {"recipe_form": RecipeForm(), "food_form": FoodIdForm()})
+    return render(request, 'recipes/new-recipe.html', {
+        "recipe_form": RecipeForm(), 
+        "food_form": FoodIdForm(), 
+        "foods": Food.objects.values('food_name')
+        })
