@@ -30,6 +30,7 @@ def index(request):
     
     class RecipeView:
         def __init__(self):
+            self.id = 0
             self.name = ""
             self.properties = []
 
@@ -46,6 +47,7 @@ def index(request):
     for recipe in recipes:
         recipeView = RecipeView()
         recipeView.name = recipe.recipe_name
+        recipeView.id = recipe.id
         recipeFoods = RecipeFood.objects.filter(recipe__pk=recipe.id)
         kcal = Decimal(0)
         carbs = Decimal(0)
@@ -110,3 +112,7 @@ def new_recipe(request):
         "food_form": FoodIdForm(), 
         "foods": Food.objects.values('id', 'food_name')
         })
+
+def recipe(request, recipe_id):
+
+    return HttpResponse("Recipe")
