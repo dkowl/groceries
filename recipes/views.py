@@ -2,8 +2,11 @@ from django.shortcuts import render
 from django.http import HttpResponse
 import copy
 import logging
+import json
+import traceback
+import datetime
 from .forms import RecipeForm, FoodIdForm
-from .models import Food
+from .models import Food, Recipe, RecipeFood
 
 # Create your views here.
 def index(request):
@@ -42,11 +45,17 @@ def index(request):
 def new_recipe(request):    
 
     logger = logging.getLogger(__name__)
-    logger.debug("Debug message")
     try:
         logger.debug(request.POST)
+        newRecipe = Recipe(creation_date=datetime.datetime.now(), recipe_name=request.POST['recipe_name'], description=request.POST['description'])
+        pickedFoods = json.loads(request.POST['picked_foods'])
+        newRecipe.save()
+        recipeId = newRecipe.id
+        for foodId, foodWeight in pickedFoods.items():
+            newRecipeFood = RecipeFood(food_id=foodId, recipe_id=recipeId, quantity_grams=foodWeight)
+            newRecipeFood.save()
     except:
-        pass
+        logger.debug(traceback.format_exc())
 
     return render(request, 'recipes/new-recipe.html', {
         "recipe_form": RecipeForm(), 
