@@ -11,6 +11,60 @@ from .models import Food, Recipe, RecipeFood
 
 logger = logging.getLogger(__name__)
 
+class RecipeView:         
+        def __init__(self, recipe=None):
+            if not recipe:
+                self.id = 0
+                self.name = ""
+                self.properties = []
+                return
+
+            self.id = recipe.id
+            self.name = recipe.recipe_name
+            recipeFoods = RecipeFood.objects.filter(recipe__pk=recipe.id)
+            kcal = Decimal(0)
+            carbs = Decimal(0)
+            protein = Decimal(0)
+            fat = Decimal(0)
+            price = Decimal(0)
+            pricePer1000Kcal = Decimal(0)
+            percentProtein = Decimal(0)
+            for recipeFood in recipeFoods:
+                food = Food.objects.get(id=recipeFood.food.id)
+                multOf100g = Decimal(recipeFood.quantity_grams) / 100
+                kcal += food.kcal_per_100g * multOf100g
+                carbs += food.carbs_per_100g * multOf100g
+                protein += food.protein_per_100g * multOf100g
+                fat += food.fat_per_100g * multOf100g
+                price += food.cost_per_kg * multOf100g / 10
+
+            pricePer1000Kcal = (price / (kcal / Decimal(1000))) if kcal else Decimal(0)
+            percentProtein = (protein * 4 / (carbs * 4 + protein * 4 + fat * 4) * 100) if carbs or protein or fat else Decimal(0)
+
+            kcal = kcal.quantize(Decimal('0.1'), ROUND_HALF_UP)
+            carbs = carbs.quantize(Decimal('0.1'), ROUND_HALF_UP)
+            protein = protein.quantize(Decimal('0.1'), ROUND_HALF_UP)
+            fat = fat.quantize(Decimal('0.1'), ROUND_HALF_UP)
+            price = price.quantize(Decimal('0.01'), ROUND_HALF_UP)
+            pricePer1000Kcal = pricePer1000Kcal.quantize(Decimal('0.01'), ROUND_HALF_UP)
+            percentProtein = percentProtein.quantize(Decimal('0.01'), ROUND_HALF_UP)
+
+            currency = " zł"
+
+            self.properties = []
+            self.properties.extend([
+                ('kcal', kcal),
+                ('carbs', str(carbs) + 'g'),
+                ('protein', str(protein) + 'g'),
+                ('fat', str(fat) + 'g'),
+                ('price', str(price) + currency),
+                ('price per 1000 kcal', str(pricePer1000Kcal) + currency),
+                ('percentProtein', str(percentProtein) + "%")
+            ])
+
+        def __repr__(self):
+            return self.name + str(self.properties)
+
 # Create your views here.
 def index(request):
     basket_props = {
@@ -28,14 +82,7 @@ def index(request):
         "kcal", "carbs", "protein", "fat", "price", "price per 1000 kcal", "% protein"
     ]
     
-    class RecipeView:
-        def __init__(self):
-            self.id = 0
-            self.name = ""
-            self.properties = []
-
-        def __repr__(self):
-            return self.name + str(self.properties)
+    
         
     basket = RecipeView()
     basket.name = "Basket"
@@ -44,50 +91,8 @@ def index(request):
        
     recipes = Recipe.objects.all()
     recipeViews = []
-    for recipe in recipes:
-        recipeView = RecipeView()
-        recipeView.name = recipe.recipe_name
-        recipeView.id = recipe.id
-        recipeFoods = RecipeFood.objects.filter(recipe__pk=recipe.id)
-        kcal = Decimal(0)
-        carbs = Decimal(0)
-        protein = Decimal(0)
-        fat = Decimal(0)
-        price = Decimal(0)
-        pricePer1000Kcal = Decimal(0)
-        percentProtein = Decimal(0)
-        for recipeFood in recipeFoods:
-            food = Food.objects.get(id=recipeFood.food.id)
-            multOf100g = Decimal(recipeFood.quantity_grams) / 100
-            kcal += food.kcal_per_100g * multOf100g
-            carbs += food.carbs_per_100g * multOf100g
-            protein += food.protein_per_100g * multOf100g
-            fat += food.fat_per_100g * multOf100g
-            price += food.cost_per_kg * multOf100g / 10
-
-        pricePer1000Kcal = (price / (kcal / Decimal(1000))) if kcal else Decimal(0)
-        percentProtein = (protein * 4 / (carbs * 4 + protein * 4 + fat * 4) * 100) if carbs or protein or fat else Decimal(0)
-
-        kcal = kcal.quantize(Decimal('0.1'), ROUND_HALF_UP)
-        carbs = carbs.quantize(Decimal('0.1'), ROUND_HALF_UP)
-        protein = protein.quantize(Decimal('0.1'), ROUND_HALF_UP)
-        fat = fat.quantize(Decimal('0.1'), ROUND_HALF_UP)
-        price = price.quantize(Decimal('0.01'), ROUND_HALF_UP)
-        pricePer1000Kcal = pricePer1000Kcal.quantize(Decimal('0.01'), ROUND_HALF_UP)
-        percentProtein = percentProtein.quantize(Decimal('0.01'), ROUND_HALF_UP)
-
-        currency = " zł"
-
-        recipeView.properties.extend([
-            ('kcal', kcal),
-            ('carbs', str(carbs) + 'g'),
-            ('protein', str(protein) + 'g'),
-            ('fat', str(fat) + 'g'),
-            ('price', str(price) + currency),
-            ('price per 1000 kcal', str(pricePer1000Kcal) + currency),
-            ('percentProtein', str(percentProtein) + "%")
-        ])
-        recipeViews.append(copy.deepcopy(recipeView))
+    for recipe in recipes:        
+        recipeViews.append(RecipeView(recipe))
 
         
     return render(request, 'recipes/index.html', {"recipes": recipeViews, "basket": basket})
@@ -114,5 +119,6 @@ def new_recipe(request):
         })
 
 def recipe(request, recipe_id):
-
+    recipe = Recipe.objects.get(id=recipe_id)
+    
     return HttpResponse("Recipe")
