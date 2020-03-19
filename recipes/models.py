@@ -32,5 +32,5 @@ class RecipeFood(models.Model):
     quantity_grams = models.PositiveIntegerField()
     
     def __str__(self):
-        return self.recipe.recipe_name + ' - ' + self.food.food_name #Recipe.objects.get(id = self.recipe).recipe_name + ' - ' + Food.objects.get(id = self.food).food_name
+        return "{0} ({1}) - {2} ({3})".format(self.recipe.recipe_name, self.recipe.id, self.food.food_name, self.food.id)
     

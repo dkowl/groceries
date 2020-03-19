@@ -61,7 +61,7 @@ class RecipeView:
                 ('fat', str(fat) + 'g'),
                 ('price', str(price) + currency),
                 ('price per 1000 kcal', str(pricePer1000Kcal) + currency),
-                ('percentProtein', str(percentProtein) + "%")
+                ('% Protein', str(percentProtein) + "%")
             ])
 
         def __repr__(self):
@@ -99,18 +99,42 @@ def index(request):
         
     return render(request, 'recipes/index.html', {"recipes": recipeViews, "basket": basket})
 
+def updateRecipeFoods(recipeId, pickedFoods):
+    # delete
+    logger.debug(RecipeFood.objects.filter(recipe_id=recipeId))
+    for recipeFood in RecipeFood.objects.filter(recipe_id=recipeId):
+        if not str(recipeFood.food_id) in pickedFoods:
+            logger.debug("I am going to delete food with id " + str(recipeFood.food_id))
+            recipeFood.delete()
+
+    # update/create
+    for foodId, foodWeight in pickedFoods.items():
+        recipeFoods = RecipeFood.objects.filter(food_id=int(foodId), recipe_id=int(recipeId))
+        logger.debug(recipeFoods)
+        if(recipeFoods):
+            logger.debug("found existing food")
+            if recipeFoods[0].quantity_grams != foodWeight:
+                recipeFoods[0].quantity_grams = foodWeight
+                recipeFoods[0].save()
+            # delete duplicates
+            for elem in recipeFoods[1:]:
+                logger.debug("deleting a duplicate")
+                elem.delete()
+        else:
+            logger.debug("creating new food")
+            newRecipeFood = RecipeFood(food_id=foodId, recipe_id=recipeId, quantity_grams=foodWeight)
+            newRecipeFood.save()
+
 def new_recipe(request):    
 
     if request.POST:
         try:
             logger.debug(request.POST)
             newRecipe = Recipe(creation_date=datetime.datetime.now(), recipe_name=request.POST['recipe_name'], description=request.POST['description'])
-            pickedFoods = json.loads(request.POST['picked_foods'])
             newRecipe.save()
             recipeId = newRecipe.id
-            for foodId, foodWeight in pickedFoods.items():
-                newRecipeFood = RecipeFood(food_id=foodId, recipe_id=recipeId, quantity_grams=foodWeight)
-                newRecipeFood.save()
+            pickedFoods = json.loads(request.POST['picked_foods'])
+            updateRecipeFoods(recipeId, pickedFoods)
         except:
             logger.debug(traceback.format_exc())
 
@@ -121,6 +145,14 @@ def new_recipe(request):
         })
 
 def recipe(request, recipe_id):
+    if request.POST:
+        try:
+            logger.debug(request.POST)
+            pickedFoods = json.loads(request.POST['picked_foods'])
+            updateRecipeFoods(recipe_id, pickedFoods)
+        except:
+            logger.debug(traceback.format_exc())
+
     recipe = RecipeView(Recipe.objects.get(id=recipe_id))
     
     return render(request, "recipes/recipe.html", {
