@@ -51,5 +51,5 @@ def new_recipe(request):
     return render(request, 'recipes/new-recipe.html', {
         "recipe_form": RecipeForm(), 
         "food_form": FoodIdForm(), 
-        "foods": Food.objects.values('food_name')
+        "foods": Food.objects.values('id', 'food_name')
         })
