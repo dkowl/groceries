@@ -1,0 +1,16 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    {% load static %}
+    <title>{% block title %}Groceries{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static "recipes/style.css" %}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+    {% block head %}{% endblock %}
+  </head>
+  <body>
+    {% block content %}
+        Content
+    {% endblock %}
+  </body>
+</html>

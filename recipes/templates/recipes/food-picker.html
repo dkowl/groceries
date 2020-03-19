@@ -1,3 +1,5 @@
+{% load static %}
+<script type="module" src="{% static "levenshteinDistance.js" %}"></script>
 <script>
   // populate foodNames from Django
   var foodNames = {};
@@ -49,7 +51,6 @@
   }
 
   var levenshteinDistance;
-  {% load static %}
   let levenshteinDistanceModule = import("{% static "levenshteinDistance.js" %}")
     .then((module) => {
       levenshteinDistance = module.default;
