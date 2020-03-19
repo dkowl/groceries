@@ -16,11 +16,13 @@ class RecipeView:
             if not recipe:
                 self.id = 0
                 self.name = ""
+                self.description = ""
                 self.properties = []
                 return
 
             self.id = recipe.id
             self.name = recipe.recipe_name
+            self.description = recipe.description
             recipeFoods = RecipeFood.objects.filter(recipe__pk=recipe.id)
             kcal = Decimal(0)
             carbs = Decimal(0)
@@ -119,6 +121,9 @@ def new_recipe(request):
         })
 
 def recipe(request, recipe_id):
-    recipe = Recipe.objects.get(id=recipe_id)
+    recipe = RecipeView(Recipe.objects.get(id=recipe_id))
     
-    return HttpResponse("Recipe")
+    return render(request, "recipes/recipe.html", {
+        "recipe": recipe,
+        "foods": Food.objects.all()
+    })
