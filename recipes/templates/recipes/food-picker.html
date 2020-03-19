@@ -7,3 +7,6 @@
 <div id="foodListDiv">
 </div>
 <script>populateFoodList()</script>
+{% if recipe %}
+  <script>populatePickedFoods()</script>
+{% endif %}

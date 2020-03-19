@@ -9,6 +9,11 @@
 
   // key - food ID, value - weight
   var pickedFoods = {};
+  {% if recipe %}
+    {% for food in recipe.foods %}
+        pickedFoods[Number({{ food.food.id }})] = Number({{ food.quantity_grams }});
+    {% endfor %}
+  {% endif %}
 
   function pickFood(foodId, foodWeight){
     if(!(foodId in pickedFoods)) pickedFoods[foodId] = Number(0);

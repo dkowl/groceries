@@ -23,7 +23,7 @@ class RecipeView:
             self.id = recipe.id
             self.name = recipe.recipe_name
             self.description = recipe.description
-            recipeFoods = RecipeFood.objects.filter(recipe__pk=recipe.id)
+            self.foods = RecipeFood.objects.filter(recipe__pk=recipe.id)
             kcal = Decimal(0)
             carbs = Decimal(0)
             protein = Decimal(0)
@@ -31,7 +31,7 @@ class RecipeView:
             price = Decimal(0)
             pricePer1000Kcal = Decimal(0)
             percentProtein = Decimal(0)
-            for recipeFood in recipeFoods:
+            for recipeFood in self.foods:
                 food = Food.objects.get(id=recipeFood.food.id)
                 multOf100g = Decimal(recipeFood.quantity_grams) / 100
                 kcal += food.kcal_per_100g * multOf100g
