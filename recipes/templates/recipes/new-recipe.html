@@ -22,6 +22,11 @@
         populatePickedFoods();
       }
 
+      function unpickFood(foodId){
+        delete pickedFoods[foodId];
+        populatePickedFoods();
+      }
+
       function populatePickedFoods(){
         divPickedFoods.textContent = "";
         for(let foodId in pickedFoods){
@@ -29,15 +34,24 @@
           let foodName = foodNames[foodId];
 
           let divPickedFood = document.createElement("div");
-          divPickedFood.className = "picked-food";
+          divPickedFood.className = "food";
           let pickedFoodNameText = document.createElement("div");
           pickedFoodNameText.className = "picked-food-name";
           pickedFoodNameText.textContent = foodName;
           let pickedFoodWeightText = document.createElement("div");
           pickedFoodWeightText.className = "picked-food-weight";
           pickedFoodWeightText.textContent = foodWeight + "g";
+          let pickedFoodDeleteBtn = document.createElement("button");
+          pickedFoodDeleteBtn.className = "add-button";
+          pickedFoodDeleteBtn.textContent = "x";
+          pickedFoodDeleteBtn.onclick = function () {
+            let foodIdCopy = foodId;
+            unpickFood(foodIdCopy);
+          };
+
           divPickedFood.append(pickedFoodNameText);
           divPickedFood.append(pickedFoodWeightText);
+          divPickedFood.append(pickedFoodDeleteBtn);
           divPickedFoods.append(divPickedFood);
         }
       }
