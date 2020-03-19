@@ -119,14 +119,14 @@
         }
       }      
 
-      function addFoodDataToPost(){
-        let formData = document.forms["newRecipeForm"]["picked_foods"];
+      function addFoodDataToPost(formId){
+        let formData = document.forms[formId]["picked_foods"];
         formData.value = JSON.stringify(pickedFoods);
       }
     </script>
   </head>
   <body>
-    <form name="newRecipeForm" action="new-recipe" method="post" onsubmit="addFoodDataToPost()">
+    <form name="newRecipeForm" action="new-recipe" method="post" onsubmit="addFoodDataToPost(newRecipeForm)">
         {% csrf_token %}
         {{ recipe_form }}
         <input type="hidden" name="picked_foods" value="" id="picked_foods">
