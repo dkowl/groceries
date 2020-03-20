@@ -1,0 +1,61 @@
+.food-picker{
+    background-color: #ece5da;
+    width: 600px;
+    padding: 10px;
+    margin-top: 20px;
+}
+
+.food-picker-input{
+    display: flex;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-top: solid 1px grey;
+    border-bottom: solid 2px grey;
+}
+
+.food-picker-name{
+    padding-left: 5px;
+    flex-grow: 1;
+    display: flex;
+}
+
+.food-picker-name > input {
+    flex-grow: 1;
+    margin-left: 5px;
+}
+
+.food-picker-weight{
+    padding-left: 5px;
+    flex-grow: 0;
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 10px;
+    margin-left: 20px;
+}
+
+.food-picker-weight > input {
+    margin-left: 5px;
+}
+
+.picked-foods{
+    background-color: #e9d4b2;
+}
+
+.food{
+    display: flex;
+    align-items: center;
+    border-bottom: solid 1px grey;
+}
+
+.food-name{
+    padding-left: 5px;
+}
+
+.food-weight{
+    padding-left: 5px;
+}
+
+.food-btn{
+    text-align: right;
+    flex-grow: 1;
+}

@@ -1,5 +1,6 @@
 {% load static %}
 <script type="module" src="{% static "levenshteinDistance.js" %}"></script>
+<link rel="stylesheet" href="{% static 'recipes/food-picker.css' %}">
 <script>
   // populate foodNames from Django
   var foodNames = {};
@@ -35,13 +36,13 @@
       let divPickedFood = document.createElement("div");
       divPickedFood.className = "food";
       let pickedFoodNameText = document.createElement("div");
-      pickedFoodNameText.className = "picked-food-name";
+      pickedFoodNameText.className = "food-name";
       pickedFoodNameText.textContent = foodName;
       let pickedFoodWeightText = document.createElement("div");
-      pickedFoodWeightText.className = "picked-food-weight";
+      pickedFoodWeightText.className = "food-weight";
       pickedFoodWeightText.textContent = foodWeight + "g";
       let pickedFoodDeleteBtn = document.createElement("button");
-      pickedFoodDeleteBtn.className = "add-button";
+      pickedFoodDeleteBtn.className = "add-button food-btn";
       pickedFoodDeleteBtn.textContent = "x";
       pickedFoodDeleteBtn.onclick = function () {
         let foodIdCopy = foodId;
@@ -102,10 +103,10 @@
       let foodDiv = document.createElement("div");
       foodDiv.className = "food";
       let foodTextDiv = document.createElement("div");
-      foodTextDiv.className = "food-text";
+      foodTextDiv.className = "food-name";
       foodTextDiv.textContent = foodName;
       let foodAddBtn = document.createElement("button");
-      foodAddBtn.className = "add-button";
+      foodAddBtn.className = "add-button food-btn";
       foodAddBtn.onclick = function () { 
         let foodWeight = document.getElementById("foodWeightGrams").value ?? 0;
         pickFood(foodId, foodWeight); 

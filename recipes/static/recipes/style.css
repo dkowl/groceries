@@ -126,8 +126,3 @@ button{
 .add-button:active{
 	color:rgb(190, 105, 35);
 }
-
-.food{
-	display: flex;
-	align-items: center;
-}
