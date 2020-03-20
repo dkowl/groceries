@@ -10,9 +10,28 @@
     <h1>{{ recipe.name }}</h1>
     <p>{{ recipe.description }}</p>
     <form name="updateRecipeForm" method="post" action="{{recipe.id}}" onSubmit="addFoodDataToPost('updateRecipeForm')">
-        {% csrf_token %}        
-        <input type="hidden" name="picked_foods" value="" id="picked_foods">
-        <input type="submit" value="Save changes">
+      {% csrf_token %}        
+      <input type="hidden" name="picked_foods" value="" id="picked_foods">
+      <input type="submit" value="Save changes">
     </form>
+    <script>
+      function showPopup(name){
+        document.forms[name].style.display = "block";
+      }
+
+      function hidePopup(name){
+        document.forms[name].style.display = "none";
+      }
+    </script>
+    <input type="submit" value="Delete" onclick="showPopup('deleteRecipePopup')">
+    <form name="deleteRecipePopup" method="post" action="/recipes/" style="display:none;">
+      {% csrf_token %}
+      <p>Are you sure you want to delete {{ recipe.name }}?</p>
+      <input type="hidden" name="action" value="delete">
+      <input type="hidden" name="recipe_id" value="{{recipe.id}}" id="recipe_id">
+      <input type="submit" value="Delete">
+      <input type="button" value="Cancel" onclick="hidePopup('deleteRecipePopup')">
+    </form>
+
     {% include "recipes/food-picker.html" %}
 {% endblock %}

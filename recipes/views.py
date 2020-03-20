@@ -69,6 +69,15 @@ class RecipeView:
 
 # Create your views here.
 def index(request):
+
+    if request.POST:
+        try:
+            if request.POST["action"] == "delete":
+                recipe = Recipe.objects.filter(id=int(request.POST['recipe_id']))
+                recipe.delete()
+        except:
+            logger.error(traceback.format_exc())
+
     basket_props = {
         "name": "Basket",
         "kcal": 0,
