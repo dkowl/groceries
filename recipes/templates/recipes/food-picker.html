@@ -8,7 +8,7 @@
     </div>
     <div class="food-picker-weight">
       <label for="foodWeightGrams">Weight (g):</label>
-      <input type="number" id="foodWeightGrams" name="foodWeightGrams" min="0" max="10000"/>
+      <input type="number" id="foodWeightGrams" name="foodWeightGrams" min="0" max="10000" oninput="populateFoodList()" value="100"/>
     </div>
   </div>
   <div id="foodListDiv">

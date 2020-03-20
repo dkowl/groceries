@@ -4,8 +4,18 @@
 <script>
   // populate foodNames from Django
   var foodNames = {};
+  var foodProperties = {};
+  let props = {};
   {% for food in foods %}
     foodNames[{{ food.id }}] = "{{ food.food_name }}";
+    props = {};
+    // value format - [value, per how many grams, decimal places]
+    props['kcal'] = [{{food.kcal_per_100g}}, 100, 0];
+    props['carbs'] = [{{food.carbs_per_100g}}, 100, 1];
+    props['protein'] = [{{food.protein_per_100g}}, 100, 1];
+    props['fat'] = [{{food.fat_per_100g}}, 100, 1];
+    props['price'] = [{{food.cost_per_kg}}, 1000, 2];
+    foodProperties[{{food.id}}] = props;
   {% endfor %}
 
   // key - food ID, value - weight
@@ -27,32 +37,65 @@
     populatePickedFoods();
   }
 
+  function createFoodWidget(foodId, foodWeight, isPicked){    
+    let foodName = foodNames[foodId];
+
+    let foodDiv = document.createElement('div');
+    foodDiv.className = "food";
+
+    let foodNameText = document.createElement('div');
+    foodNameText.className = "food-name";
+    foodNameText.textContent = foodName;
+    foodDiv.append(foodNameText);
+
+    let foodWeightText = document.createElement('div');
+    foodWeightText.className = 'food-weight';
+    foodWeightText.textContent = foodWeight + "g";
+    foodDiv.append(foodWeightText);
+
+    for(let propName in foodProperties[foodId]){
+      let foodPropDiv = document.createElement('div');
+      foodPropDiv.className = 'food-property';
+
+      let foodPropTitle = document.createElement('div');
+      foodPropTitle.className = 'food-property-title';
+      foodPropTitle.textContent = propName;
+      foodPropDiv.append(foodPropTitle);
+
+      let foodPropValue = document.createElement('div');
+      foodPropValue.className = 'food-property-value';
+      let foodProp = foodProperties[foodId][propName];
+      foodPropValue.textContent = (foodProp[0] * foodWeight / foodProp[1]).toFixed(foodProp[2]);
+      foodPropDiv.append(foodPropValue);
+
+      foodDiv.append(foodPropDiv);
+    }
+
+    let foodBtn = document.createElement('button');
+    foodBtn.className = "add-button food-btn";
+    if(isPicked){
+      foodBtn.textContent = 'x';
+      foodBtn.onclick = function () {
+        unpickFood(foodId);
+      }
+    }
+    else{
+      foodBtn.textContent = '+';
+      foodBtn.onclick = function () {
+        let tempFoodWeight = foodWeight;
+        pickFood(foodId, tempFoodWeight);
+      }
+    }
+    foodDiv.append(foodBtn);
+
+    return foodDiv;
+  }
+
   function populatePickedFoods(){
     divPickedFoods.textContent = "";
     for(let foodId in pickedFoods){
-      let foodWeight = pickedFoods[foodId];
-      let foodName = foodNames[foodId];
-
-      let divPickedFood = document.createElement("div");
-      divPickedFood.className = "food";
-      let pickedFoodNameText = document.createElement("div");
-      pickedFoodNameText.className = "food-name";
-      pickedFoodNameText.textContent = foodName;
-      let pickedFoodWeightText = document.createElement("div");
-      pickedFoodWeightText.className = "food-weight";
-      pickedFoodWeightText.textContent = foodWeight + "g";
-      let pickedFoodDeleteBtn = document.createElement("button");
-      pickedFoodDeleteBtn.className = "add-button food-btn";
-      pickedFoodDeleteBtn.textContent = "x";
-      pickedFoodDeleteBtn.onclick = function () {
-        let foodIdCopy = foodId;
-        unpickFood(foodIdCopy);
-      };
-
-      divPickedFood.append(pickedFoodNameText);
-      divPickedFood.append(pickedFoodWeightText);
-      divPickedFood.append(pickedFoodDeleteBtn);
-      divPickedFoods.append(divPickedFood);
+      let foodWeight = pickedFoods[foodId];      
+      divPickedFoods.append(createFoodWidget(foodId, foodWeight, true));
     }
   }
 
@@ -98,24 +141,9 @@
     }
 
     for(i = 0; i < foodList.length; i++){
-      let foodName = foodList[i].name;
       let foodId = Number(foodList[i].id);
-      let foodDiv = document.createElement("div");
-      foodDiv.className = "food";
-      let foodTextDiv = document.createElement("div");
-      foodTextDiv.className = "food-name";
-      foodTextDiv.textContent = foodName;
-      let foodAddBtn = document.createElement("button");
-      foodAddBtn.className = "add-button food-btn";
-      foodAddBtn.onclick = function () { 
-        let foodWeight = document.getElementById("foodWeightGrams").value ?? 0;
-        pickFood(foodId, foodWeight); 
-      };
-      foodAddBtn.textContent = "+";
-
-      foodDiv.append(foodTextDiv);
-      foodDiv.append(foodAddBtn);
-      foodListDiv.append(foodDiv);
+      let foodWeight = document.getElementById("foodWeightGrams").value ?? 0;      
+      foodListDiv.append(createFoodWidget(foodId, foodWeight, false));
     }
   }      
 

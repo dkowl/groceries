@@ -1,6 +1,6 @@
 .food-picker{
     background-color: #ece5da;
-    width: 600px;
+    width: 700px;
     padding: 10px;
     margin-top: 20px;
 }
@@ -49,13 +49,27 @@
 
 .food-name{
     padding-left: 5px;
+    flex-shrink: 1;
+
 }
 
 .food-weight{
     padding-left: 5px;
+    flex-grow: 1;
 }
 
 .food-btn{
     text-align: right;
-    flex-grow: 1;
+}
+
+.food-property{
+    width: 60px;
+}
+
+.food-property-title {
+    font-size: 0.6em;
+}
+
+.food-property-value {
+    font-size: 0.8em;
 }
