@@ -49,13 +49,14 @@
 
 .food-name{
     padding-left: 5px;
-    flex-shrink: 1;
+    flex-grow: 1;
 
 }
 
 .food-weight{
     padding-left: 5px;
-    flex-grow: 1;
+    width: 60px;
+    font-size: 0.8em;
 }
 
 .food-btn{

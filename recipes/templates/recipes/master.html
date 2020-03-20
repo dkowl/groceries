@@ -4,11 +4,23 @@
     {% load static %}
     <title>{% block title %}Groceries{% endblock %}</title>
     {% load static %}
+    <link rel="stylesheet" href="{% static "recipes/master.css" %}">
     <link rel="stylesheet" href="{% static "recipes/style.css" %}">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap" rel="stylesheet">
     {% block head %}{% endblock %}
   </head>
   <body>
+    <div class='navbar'>
+      <div class='logo'>
+        Groceries
+      </div>
+      <div class='nav-button'>
+        <a href="/recipes">Recipes</a>
+      </div>
+      <div class='nav-button'>
+        <a href="/admin">Admin</a>
+      </div>
+    </div>
     {% block content %}
         Content
     {% endblock %}

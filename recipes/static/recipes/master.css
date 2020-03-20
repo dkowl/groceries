@@ -1,0 +1,35 @@
+.navbar{
+    display: flex;
+    background-color: #a4c2bd;
+    padding: 10px 20px;
+    margin-bottom: 10px;
+    color: #f2f4ef;
+    align-items: center;
+    text-shadow: 1px 1px 1px grey;
+}
+
+.logo{
+    font-size: 2em;
+    margin-right: 40px;
+}
+
+.nav-button{
+    font-size: 1.2em;
+    font-weight: bold;
+    padding-left: 20px;
+    padding-right: 20px;
+    text-align: center;
+}
+
+.nav-button > a{
+    color: #f2f4ef;
+    text-decoration: none;
+}
+
+.nav-button > a:hover{
+    color: rgb(255, 142, 50);
+}
+
+.nav-button > a:active{
+    color: rgb(190, 105, 35);
+}

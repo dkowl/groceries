@@ -150,7 +150,7 @@ def new_recipe(request):
     return render(request, 'recipes/new-recipe.html', {
         "recipe_form": RecipeForm(), 
         "food_form": FoodIdForm(), 
-        "foods": Food.objects.values('id', 'food_name')
+        "foods": Food.objects.all()
         })
 
 def recipe(request, recipe_id):
