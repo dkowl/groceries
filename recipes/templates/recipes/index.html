@@ -3,40 +3,93 @@
 {% block title %}Your Recipes{% endblock %}
     
 {% block content %}
-  <div class="recipe-row basket">
-    <div class="recipe-name basket-name">Basket</div>
-    {% for property in basket.properties %}
-      <div class="recipe-property">
-        <div class="recipe-property-title">{{ property.0 }}</div>
-        <div class="recipe-property-value">{{ property.1 }}</div>
-      </div>
+  <script>
+    var recipeIds = [];
+    {% for recipeId in basket.recipeIds %}
+      recipeIds.push({{ recipeId }});
     {% endfor %}
-    <div class="recipe-row-end">
-      <button class="clear-btn">Clear</button>
-      <button class="primary-btn">Grocery List</button>
-    </div>
-  </div>
-  <div class="recipes">
-    <div class="recipes-title">Recipes</div>
-    {% for recipe in recipes %}
-      <div class="recipe-row">
-        <div class="recipe-name"><a href="{{ recipe.id }}">{{ recipe.name }}</a></div>
-        {% for property in recipe.properties %}
+
+    function updateRecipeIds(){
+      let url = '.';
+      if(recipeIds.length > 0){
+        url = '?';
+        for(i = 0; i < recipeIds.length; i++){
+          url = url + "r=" + recipeIds[i] + '&';
+        }
+        url = url.slice(0, -1);
+      }
+      window.location.href = url;
+    }
+
+    function addRecipe(recipeId){    
+      recipeIds.push(recipeId);  
+      updateRecipeIds();
+    }
+
+    function removeRecipe(recipeId){
+      let found = false;
+      for(i = 0; i < recipeIds.length; i++){
+        if(recipeIds[i] == recipeId){
+          recipeIds.splice(i, 1);
+          found = true;
+        }
+      }
+      if(found){
+        updateRecipeIds();
+      }
+    }
+  </script>
+
+  <div class='recipes-main'>
+    <div class="recipe-picker">
+      <div class="recipe-row basket">
+        <div class="recipe-name basket-name" id='basketName'>Basket</div>
+        {% for property in basket.foodsView.properties %}
           <div class="recipe-property">
             <div class="recipe-property-title">{{ property.0 }}</div>
             <div class="recipe-property-value">{{ property.1 }}</div>
           </div>
         {% endfor %}
         <div class="recipe-row-end">
-          <button class="add-button add-button-add">
-            +              
-          </button>
-          <button class="add-button add-button-remove">
-            -
-          </button>
         </div>
       </div>
-    {% endfor %}
-    <a class="primary-btn" id="new-recipe" href='new-recipe'>New recipe</a>
+      <div class="picked-recipes">
+        {% for recipeName in basket.recipeNames %}
+          <div class="picked-recipe">{{recipeName}}</div>
+        {% endfor %}
+      </div>
+      <div class="recipes">
+        <div class="recipes-title">Recipes</div>
+        {% for recipe in recipes %}
+          <div class="recipe-row">
+            <div class="recipe-name"><a href="{{ recipe.id }}">{{ recipe.name }}</a></div>
+            {% for property in recipe.foodsView.properties %}
+              <div class="recipe-property">
+                <div class="recipe-property-title">{{ property.0 }}</div>
+                <div class="recipe-property-value">{{ property.1 }}</div>
+              </div>
+            {% endfor %}
+            <div class="recipe-row-end">
+              <button class="add-button add-button-add" onclick="addRecipe({{recipe.id}})">
+                +              
+              </button>
+              <button class="add-button add-button-remove" onclick="removeRecipe({{recipe.id}})">
+                -
+              </button>
+            </div>
+          </div>
+        {% endfor %}
+        <a class="primary-btn" id="new-recipe" href='new-recipe'>New recipe</a>
+      </div>
+    </div>
+    <div class="grocery-list">
+      <h2>Grocery list</h2>
+      {% for category in basket.groceryList.categories %}
+        <div class='food-category'>{{category.0}}</div>
+        {% for food in category.1 %}
+          - {{food.0}} {{food.1}}g<br/>
+        {% endfor %}
+      {% endfor %}
+    </div>
   </div>
 {% endblock %}

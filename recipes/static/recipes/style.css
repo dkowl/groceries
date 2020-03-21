@@ -3,6 +3,25 @@ body {
 	font-family: "Roboto", sans-serif;
 }
 
+.recipes-main{
+	display: flex;
+}
+
+.recipe-picker{
+	width: 1200px;
+}
+
+.grocery-list{
+	margin-left: 20px;
+	flex-shrink: 10;
+}
+
+.food-category{
+	background-color: 677a77;
+	color: f2f4ef;
+	padding: 1px;
+}
+
 .recipe-row {
 	display: flex;
 	justify-content: center;
@@ -16,6 +35,24 @@ body {
 	background-color: 677a77;
 	color: f2f4ef;
 	border-radius: 200px;
+}
+
+.picked-recipes{
+	display: flex;
+	text-align: center;
+	padding-top: 5px;
+	justify-content: center;
+}
+
+.picked-recipe{
+	background-color:rgb(233, 130, 45);
+	width: fit-content;
+	padding: 3px;
+	color: #f2f4ef;
+	font-size: 0.8em;
+	font-weight: 500;
+	border-radius: 3px;
+	margin: 0px 5px;
 }
 
 button{
