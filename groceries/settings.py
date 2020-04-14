@@ -118,6 +118,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
+import mimetypes
+mimetypes.add_type("application/javascript", ".js", True)
+
 STATIC_URL = '/static/'
 
 LOGGING = {
